@@ -20,5 +20,5 @@ until docker exec my-postgres pg_isready -U admin > /dev/null 2>&1; do
 done
 
 # Create databases
-docker exec -i my-postgres psql -U admin -c "CREATE DATABASE ducklake_catalog_one;"
-docker exec -i my-postgres psql -U admin -c "CREATE DATABASE ducklake_catalog_two;"
+docker exec -i my-postgres psql -U admin -d postgres -c "CREATE DATABASE ducklake_catalog_one;"
+docker exec -i my-postgres psql -U admin -d postgres -c "CREATE DATABASE ducklake_catalog_two;"
