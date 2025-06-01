@@ -1,11 +1,10 @@
 #!/bin/bash
+set -e
 
-set -e  # Exit on any error
-
-# Install DuckDB
+# 1) Install DuckDB (if not already installed)
 curl https://install.duckdb.org | sh
 
-# Start Postgres container
+# 2) Run Postgres container
 docker run --name my-postgres \
   -e POSTGRES_USER=admin \
   -e POSTGRES_PASSWORD=admin \
@@ -13,15 +12,18 @@ docker run --name my-postgres \
   -p 5432:5432 \
   -d postgres
 
-# Wait for Postgres to be ready
+# 3) Wait until Postgres is accepting connections
 echo "Waiting for Postgres to be ready..."
 until docker exec my-postgres pg_isready -U admin > /dev/null 2>&1; do
   sleep 1
 done
 
-# Create databases
-docker exec -i my-postgres psql -U admin -d postgres -c "CREATE DATABASE ducklake_catalog_one;"
-docker exec -i my-postgres psql -U admin -d postgres -c "CREATE DATABASE ducklake_catalog_two;"
+# 4) Create both databases with a single psql invocation
+docker exec my-postgres psql -U admin -d postgres -c "
+  CREATE DATABASE ducklake_catalog_one;
+  CREATE DATABASE ducklake_catalog_two;
+"
 
-# Create data directory
-mkdir data
+# 5) Make your data directory
+mkdir -p data
+
