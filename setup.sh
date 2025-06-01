@@ -22,3 +22,6 @@ done
 # Create databases
 docker exec -i my-postgres psql -U admin -d postgres -c "CREATE DATABASE ducklake_catalog_one;"
 docker exec -i my-postgres psql -U admin -d postgres -c "CREATE DATABASE ducklake_catalog_two;"
+
+# Create data directory
+mkdir data
